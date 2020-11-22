@@ -10,6 +10,8 @@
     "@types/node": "^12.19.6",
     "@types/react": "^16.14.1",
     "@types/react-dom": "^16.9.10",
+    "autoprefixer": "^10.0.2",
+    "postcss": "^8.1.9",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.0-next.98",
@@ -18,7 +20,8 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
+    "start": "npm run tailwind:build & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
