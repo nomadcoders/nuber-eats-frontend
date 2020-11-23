@@ -21,14 +21,15 @@
     "react-hook-form": "^6.11.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0-next.98",
+    "rimraf": "^3.0.2",
     "tailwindcss": "^2.0.1",
     "typescript": "^4.1.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
     "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
-    "start": "npm run tailwind:build & react-scripts start",
-    "apollo:codegen": "apollo client:codegen src/__generated__ --target=typescript --outputFlat",
+    "start": "npm run apollo:codegen & npm run tailwind:build & react-scripts start",
+    "apollo:codegen": " rimraf src/__generated__ && apollo client:codegen src/__generated__ --target=typescript --outputFlat",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
