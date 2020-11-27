@@ -6,6 +6,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import { Header } from "../components/header";
 import { Restaurants } from "../pages/client/restaurants";
 import { meQuery } from "../__generated__/meQuery";
 
@@ -37,6 +38,7 @@ export const LoggedInRouter = () => {
   }
   return (
     <Router>
+      <Header />
       <Switch>
         {data.me.role === "Client" && ClientRoutes}
         <Redirect from="/potato" to="/" />
