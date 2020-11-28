@@ -55,5 +55,5 @@ export interface restaurantsPageQuery {
 }
 
 export interface restaurantsPageQueryVariables {
-  input?: RestaurantsInput | null;
+  input: RestaurantsInput;
 }
