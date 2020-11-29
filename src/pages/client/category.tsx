@@ -40,6 +40,5 @@ export const Category = () => {
       },
     }
   );
-  console.log(data);
   return <h1>Category</h1>;
 };
