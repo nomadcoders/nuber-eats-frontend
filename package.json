@@ -65,5 +65,8 @@
       "./src/pages/**/*.tsx",
       "./src/routers/**/*.tsx"
     ]
+  },
+  "devDependencies": {
+    "mock-apollo-client": "^1.0.0"
   }
 }
