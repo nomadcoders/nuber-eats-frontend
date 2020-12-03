@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Button } from "../../components/button";
 import { FormError } from "../../components/form-error";
+import { MY_RESTAURANTS_QUERY } from "./my-restaurants";
 import {
   createRestaurant,
   createRestaurantVariables,
@@ -14,6 +15,7 @@ const CREATE_RESTAURANT_MUTATION = gql`
     createRestaurant(input: $input) {
       error
       ok
+      restaurantId
     }
   }
 `;
@@ -28,7 +30,7 @@ interface IFormProps {
 export const AddRestaurant = () => {
   const onCompleted = (data: createRestaurant) => {
     const {
-      createRestaurant: { ok, error },
+      createRestaurant: { ok, restaurantId },
     } = data;
     if (ok) {
       setUploading(false);
@@ -40,13 +42,7 @@ export const AddRestaurant = () => {
   >(CREATE_RESTAURANT_MUTATION, {
     onCompleted,
   });
-  const {
-    register,
-    getValues,
-    formState,
-    errors,
-    handleSubmit,
-  } = useForm<IFormProps>({
+  const { register, getValues, formState, handleSubmit } = useForm<IFormProps>({
     mode: "onChange",
   });
   const [uploading, setUploading] = useState(false);
