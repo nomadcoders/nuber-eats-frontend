@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { Dish } from "../../components/dish";
 import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
+import { useMe } from "../../hooks/useMe";
 import {
   myRestaurant,
   myRestaurantVariables,
@@ -42,14 +43,27 @@ export const MyRestaurant = () => {
       },
     }
   );
-  console.log(data);
+  const { data: userData } = useMe();
+  const triggerPaddle = () => {
+    if (userData?.me.email) {
+      // @ts-ignore
+      window.Paddle.Setup({ vendor: 31465 });
+      // @ts-ignore
+      window.Paddle.Checkout.open({
+        product: 638793,
+        email: userData.me.email,
+      });
+    }
+  };
   return (
     <div>
       <Helmet>
         <title>
           {data?.myRestaurant.restaurant?.name || "Loading..."} | Nuber Eats
         </title>
+        <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
       </Helmet>
+      <div className="checkout-container"></div>
       <div
         className="  bg-gray-700  py-28 bg-center bg-cover"
         style={{
@@ -66,16 +80,20 @@ export const MyRestaurant = () => {
         >
           Add Dish &rarr;
         </Link>
-        <Link to={``} className=" text-white bg-lime-700 py-3 px-10">
+        <span
+          onClick={triggerPaddle}
+          className=" cursor-pointer text-white bg-lime-700 py-3 px-10"
+        >
           Buy Promotion &rarr;
-        </Link>
+        </span>
         <div className="mt-10">
           {data?.myRestaurant.restaurant?.menu.length === 0 ? (
             <h4 className="text-xl mb-5">Please upload a dish!</h4>
           ) : (
             <div className="grid mt-16 md:grid-cols-3 gap-x-5 gap-y-10">
-              {data?.myRestaurant.restaurant?.menu.map((dish) => (
+              {data?.myRestaurant.restaurant?.menu.map((dish, index) => (
                 <Dish
+                  key={index}
                   name={dish.name}
                   description={dish.description}
                   price={dish.price}
