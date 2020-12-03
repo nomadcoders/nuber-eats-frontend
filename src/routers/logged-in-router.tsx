@@ -12,6 +12,7 @@ import { Restaurant } from "../pages/client/restaurant";
 import { MyRestaurants } from "../pages/owner/my-restaurants";
 import { MyRestaurant } from "../pages/owner/my-restaurant";
 import { AddRestaurant } from "../pages/owner/add-restaurants";
+import { AddDish } from "../pages/owner/add-dish";
 
 const clientRoutes = [
   {
@@ -41,6 +42,7 @@ const restaurantRoutes = [
   { path: "/", component: <MyRestaurants /> },
   { path: "/add-restaurant", component: <AddRestaurant /> },
   { path: "/restaurants/:id", component: <MyRestaurant /> },
+  { path: "/restaurants/:id/add-dish", component: <AddDish /> },
 ];
 
 export const LoggedInRouter = () => {
