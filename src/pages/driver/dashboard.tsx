@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
-import { gql, useSubscription } from "@apollo/client";
+import { gql, useMutation, useSubscription } from "@apollo/client";
 import { FULL_ORDER_FRAGMENT } from "../../fragments";
 import { coockedOrders } from "../../__generated__/coockedOrders";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { takeOrder, takeOrderVariables } from "../../__generated__/takeOrder";
 
 const COOCKED_ORDERS_SUBSCRIPTION = gql`
   subscription coockedOrders {
@@ -12,6 +13,15 @@ const COOCKED_ORDERS_SUBSCRIPTION = gql`
     }
   }
   ${FULL_ORDER_FRAGMENT}
+`;
+
+const TAKE_ORDER_MUTATION = gql`
+  mutation takeOrder($input: TakeOrderInput!) {
+    takeOrder(input: $input) {
+      ok
+      error
+    }
+  }
 `;
 
 interface ICoords {
@@ -103,6 +113,27 @@ export const Dashboard = () => {
       makeRoute();
     }
   }, [coockedOrdersData]);
+  const history = useHistory();
+  const onCompleted = (data: takeOrder) => {
+    if (data.takeOrder.ok) {
+      history.push(`/orders/${coockedOrdersData?.cookedOrders.id}`);
+    }
+  };
+  const [takeOrderMutation] = useMutation<takeOrder, takeOrderVariables>(
+    TAKE_ORDER_MUTATION,
+    {
+      onCompleted,
+    }
+  );
+  const triggerMutation = (orderId: number) => {
+    takeOrderMutation({
+      variables: {
+        input: {
+          id: orderId,
+        },
+      },
+    });
+  };
   return (
     <div>
       <div
@@ -131,12 +162,14 @@ export const Dashboard = () => {
               Pick it up soon @{" "}
               {coockedOrdersData?.cookedOrders.restaurant?.name}
             </h1>
-            <Link
-              to={`/orders/${coockedOrdersData?.cookedOrders.id}`}
+            <button
+              onClick={() =>
+                triggerMutation(coockedOrdersData?.cookedOrders.id)
+              }
               className="btn w-full  block  text-center mt-5"
             >
               Accept Challenge &rarr;
-            </Link>
+            </button>
           </>
         ) : (
           <h1 className="text-center  text-3xl font-medium">
