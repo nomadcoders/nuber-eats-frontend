@@ -2,22 +2,31 @@ import React from "react";
 import { restaurant_restaurant_restaurant_menu_options } from "../__generated__/restaurant";
 
 interface IDishProps {
+  id?: number;
   description: string;
   name: string;
   price: number;
   isCustomer?: boolean;
+  orderStarted?: boolean;
   options?: restaurant_restaurant_restaurant_menu_options[] | null;
+  addItemToOrder: (dishId: number) => void;
 }
 
 export const Dish: React.FC<IDishProps> = ({
+  id = 0,
   description,
   name,
   price,
   isCustomer = false,
+  orderStarted = false,
   options,
+  addItemToOrder,
 }) => {
   return (
-    <div className=" px-8 py-4 border cursor-pointer hover:border-gray-800 transition-all ">
+    <div
+      onClick={() => (orderStarted ? addItemToOrder(id) : null)}
+      className=" px-8 py-4 border cursor-pointer hover:border-gray-800 transition-all "
+    >
       <div className="mb-5">
         <h3 className="text-lg font-medium ">{name}</h3>
         <h4 className="font-medium">{description}</h4>
