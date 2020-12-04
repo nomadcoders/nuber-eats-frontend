@@ -29,6 +29,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0-next.98",
     "rimraf": "^3.0.2",
+    "subscriptions-transport-ws": "^0.9.18",
     "tailwindcss": "^2.0.1",
     "typescript": "^4.1.2",
     "victory": "^35.4.2",
