@@ -1,10 +1,14 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Dish } from "../../components/dish";
 import { DishOption } from "../../components/dish-option";
 import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
+import {
+  createOrder,
+  createOrderVariables,
+} from "../../__generated__/createOrder";
 import { CreateOrderItemInput } from "../../__generated__/globalTypes";
 import {
   restaurant,
@@ -33,6 +37,7 @@ const CREATE_ORDER_MUTATION = gql`
     createOrder(input: $input) {
       ok
       error
+      orderId
     }
   }
 `;
@@ -126,7 +131,42 @@ export const Restaurant = () => {
     }
     return false;
   };
-  console.log(orderItems);
+  const triggerCancelOrder = () => {
+    setOrderStarted(false);
+    setOrderItems([]);
+  };
+  const history = useHistory();
+  const onCompleted = (data: createOrder) => {
+    const {
+      createOrder: { ok, orderId },
+    } = data;
+    if (data.createOrder.ok) {
+      history.push(`/orders/${orderId}`);
+    }
+  };
+  const [createOrderMutation, { loading: placingOrder }] = useMutation<
+    createOrder,
+    createOrderVariables
+  >(CREATE_ORDER_MUTATION, {
+    onCompleted,
+  });
+  const triggerConfirmOrder = () => {
+    if (orderItems.length === 0) {
+      alert("Can't place empty order");
+      return;
+    }
+    const ok = window.confirm("You are about to place an order");
+    if (ok) {
+      createOrderMutation({
+        variables: {
+          input: {
+            restaurantId: +params.id,
+            items: orderItems,
+          },
+        },
+      });
+    }
+  };
   return (
     <div>
       <Helmet>
@@ -149,9 +189,25 @@ export const Restaurant = () => {
         </div>
       </div>
       <div className="container pb-32 flex flex-col items-end mt-20">
-        <button onClick={triggerStartOrder} className="btn px-10">
-          {orderStarted ? "Ordering" : "Start Order"}
-        </button>
+        {!orderStarted && (
+          <button onClick={triggerStartOrder} className="btn px-10">
+            Start Order
+          </button>
+        )}
+        {orderStarted && (
+          <div className="flex items-center">
+            <button onClick={triggerConfirmOrder} className="btn px-10 mr-3">
+              Confirm Order
+            </button>
+            <button
+              onClick={triggerCancelOrder}
+              className="btn px-10 bg-black hover:bg-black"
+            >
+              Cancel Order
+            </button>
+          </div>
+        )}
+
         <div className="w-full grid mt-16 md:grid-cols-3 gap-x-5 gap-y-10">
           {data?.restaurant.restaurant?.menu.map((dish, index) => (
             <Dish
