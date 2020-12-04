@@ -91,10 +91,10 @@ export const MyRestaurant = () => {
   const triggerPaddle = () => {
     if (userData?.me.email) {
       // @ts-ignore
-      window.Paddle.Setup({ vendor: 666 });
+      window.Paddle.Setup({ vendor: 31465 });
       // @ts-ignore
       window.Paddle.Checkout.open({
-        product: 666,
+        product: 638793,
         email: userData.me.email,
         successCallback: (data: any) => {
           createPaymentMutation({
@@ -109,19 +109,6 @@ export const MyRestaurant = () => {
       });
     }
   };
-  const chartData = [
-    { x: 1, y: 3000 },
-    { x: 2, y: 1500 },
-    { x: 3, y: 4250 },
-    { x: 4, y: 1250 },
-    { x: 5, y: 2300 },
-    { x: 6, y: 7150 },
-    { x: 7, y: 6830 },
-    { x: 8, y: 6830 },
-    { x: 9, y: 6830 },
-    { x: 10, y: 6830 },
-    { x: 11, y: 6830 },
-  ];
   return (
     <div>
       <Helmet>
