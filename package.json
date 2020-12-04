@@ -73,6 +73,7 @@
   },
   "devDependencies": {
     "@testing-library/cypress": "^7.0.2",
+    "@types/googlemaps": "^3.40.3",
     "mock-apollo-client": "^1.0.0"
   }
 }
