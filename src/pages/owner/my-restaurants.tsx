@@ -1,5 +1,5 @@
-import { gql, useApolloClient, useQuery } from "@apollo/client";
-import React, { useEffect } from "react";
+import { gql, useQuery } from "@apollo/client";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Restaurant } from "../../components/restaurant";
